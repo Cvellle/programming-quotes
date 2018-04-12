@@ -1,10 +1,13 @@
 import React from 'react'
-import Github from './Github'
+import {connect} from 'react-redux'
 import {Link} from 'react-router-dom'
+
+import Github from './Github'
 import translate from '../../shared/translate'
+import {setLanguage} from '../../state/actions'
 import './Navigation.css'
 
-const Navigation = ({language, setLang, token, admin}) => (
+const Navigation = ({language, setLanguage, token, admin}) => (
   <header>
     <Github repoUrl="https://github.com/skolakoda/programming-quotes" />
     <nav>
@@ -17,14 +20,26 @@ const Navigation = ({language, setLang, token, admin}) => (
       }
       <div>
         <button
-          onClick={() => setLang('en')}
+          onClick={() => setLanguage('en')}
           className={language === 'en' ? 'active' : ''}>ENG</button>
         <button
-          onClick={() => setLang('sr')}
+          onClick={() => setLanguage('sr')}
           className={language === 'sr' ? 'active' : ''}>SRB</button>
       </div>
     </nav>
   </header>
 )
 
-export default Navigation
+const mapStateToProps = ({language, token, admin}) => {
+  return {
+    language,
+    token,
+    admin
+  }
+}
+
+const mapDispatchToProps = {
+  setLanguage
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Navigation)

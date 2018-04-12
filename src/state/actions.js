@@ -32,3 +32,9 @@ export const setAdmin = admin => ({
   type: 'SET_ADMIN',
   admin
 })
+
+export const setUser = (token, admin = false) => ({
+  type: 'SET_USER',
+  token,
+  admin
+})

@@ -2,8 +2,7 @@ import React, {Component} from 'react'
 import { Switch, Route } from 'react-router-dom'
 
 import {store} from '../state/reducer'
-import {setQuotes, setAuthors, setImages, setLanguage, setToken, setAdmin} from '../state/action-creators'
-import translate from '../shared/translate'
+import {setQuotes, setAuthors, setImages, setUser} from '../state/actions'
 import {getallImages, checkToken} from '../shared/helpers'
 import {API, domain} from '../config/api'
 import {LS} from '../config/localstorage'
@@ -20,17 +19,10 @@ import Auth from '../routes/Auth'
 import cachedQuotes from '../data/quotes.json'
 import './App.css'
 
+// TODO: ukinuti bespotrebno prosledjivanje
+// BUG: profile logout ne re-renderuje
+
 const {dispatch} = store
-
-const setLang = language => {
-  dispatch(setLanguage(language))
-  translate.setLanguage(language)
-}
-
-const setUser = (token, admin = false) => {
-  dispatch(setToken(token))
-  dispatch(setAdmin(admin))
-}
 
 class App extends Component {
   constructor() {
@@ -44,10 +36,14 @@ class App extends Component {
     if (store.getState().token) this.checkToken()
   }
 
+  setUser(token, admin = false) {
+    dispatch(setUser(token, admin))
+  }
+
   checkToken() {
     const service = localStorage.getItem(LS.service)
     const token = store.getState().token
-    checkToken(`${domain}/auth/${service}/${token}`, token, setUser)
+    checkToken(`${domain}/auth/${service}/${token}`, token, this.setUser)
   }
 
   loadQuotes(url) {
@@ -82,30 +78,20 @@ class App extends Component {
     return (
       <div className="App">
         <section className="right-section">
-          <Navigation
-            language={store.getState().language}
-            setLang={setLang}
-            token={store.getState().token}
-            admin={store.getState().admin}
-          />
-
+          <Navigation />
+          {/* TODO: odvojiti switch u zasebnu komponentu */}
           <Switch>
             <Route path='/add-quote' component={EditQuote} />
             <Route path='/edit-quote/:id' component={EditQuote} />
             <Route path='/quote/:id' component={ShowQuote} />
             <Route path='/login' component={Login} />
-            <Route path='/profile' component={() => (
-              <Profile setUser={setUser} />
-            )} />
-            <Route path='/auth/:service/:token' render={props => (
-              <Auth {...props} setUser={setUser} />
-            )} />
+            <Route path='/profile' component={Profile} />
+            <Route path='/auth/:service/:token' render={Auth} />
             <Route path='/author/:name' component={Author} />
             <Route path='/all-quotes' render={() => <AllQuotes/>} />
             <Route path='/' component={RandomQuote} />
           </Switch>
         </section>
-
         <Sidebar />
       </div>
     )

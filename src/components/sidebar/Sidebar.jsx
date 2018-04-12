@@ -3,7 +3,7 @@ import {connect} from 'react-redux'
 
 import Filters from './Filters'
 import Authors from './Authors'
-import {setPhrase} from '../../state/action-creators'
+import {setPhrase} from '../../state/actions'
 import './Sidebar.css'
 
 class Sidebar extends Component {

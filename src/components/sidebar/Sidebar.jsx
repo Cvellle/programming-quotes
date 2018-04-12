@@ -1,6 +1,9 @@
 import React, {Component} from 'react'
+import {connect} from 'react-redux'
+
 import Filters from './Filters'
 import Authors from './Authors'
+import {setPhrase} from '../../state/action-creators'
 import './Sidebar.css'
 
 class Sidebar extends Component {
@@ -29,4 +32,15 @@ class Sidebar extends Component {
   }
 }
 
-export default Sidebar
+const mapStateToProps = state => {
+  return {
+    authors: state.allAuthors,
+    allImages : state.allImages
+  }
+}
+
+const mapDispatchToProps = {
+  setPhrase
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Sidebar)

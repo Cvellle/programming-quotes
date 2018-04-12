@@ -13,7 +13,7 @@ export const setImages = allImages => ({
   allImages
 })
 
-export const setPhase = phrase => ({
+export const setPhrase = phrase => ({
   type: 'SET_PHASE',
   phrase
 })

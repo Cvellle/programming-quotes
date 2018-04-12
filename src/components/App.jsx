@@ -2,7 +2,7 @@ import React, {Component} from 'react'
 import { Switch, Route } from 'react-router-dom'
 
 import {store} from '../state/reducer'
-import {setQuotes, setAuthors, setImages, setPhase, setLanguage, setToken, setAdmin} from '../state/actions'
+import {setQuotes, setAuthors, setImages, setLanguage, setToken, setAdmin} from '../state/action-creators'
 import translate from '../shared/translate'
 import {getallImages, checkToken} from '../shared/helpers'
 import {API, domain} from '../config/api'
@@ -22,10 +22,19 @@ import './App.css'
 
 const {dispatch} = store
 
+const setLang = language => {
+  dispatch(setLanguage(language))
+  translate.setLanguage(language)
+}
+
+const setUser = (token, admin = false) => {
+  dispatch(setToken(token))
+  dispatch(setAdmin(admin))
+}
+
 class App extends Component {
   constructor() {
     super()
-    store.subscribe(() => console.log(store.getState()))
     store.subscribe(this.render)
   }
 
@@ -38,7 +47,7 @@ class App extends Component {
   checkToken() {
     const service = localStorage.getItem(LS.service)
     const token = store.getState().token
-    checkToken(`${domain}/auth/${service}/${token}`, token, this.setUser)
+    checkToken(`${domain}/auth/${service}/${token}`, token, setUser)
   }
 
   loadQuotes(url) {
@@ -69,27 +78,13 @@ class App extends Component {
     )
   }
 
-  setPhrase = phrase => {
-    dispatch(setPhase(phrase))
-  }
-
-  setUser = (token, admin = false) => {
-    dispatch(setToken(token))
-    dispatch(setAdmin(admin))
-  }
-
-  setLang = language => {
-    dispatch(setLanguage(language))
-    translate.setLanguage(language)
-  }
-
   render = () => {
     return (
       <div className="App">
         <section className="right-section">
           <Navigation
             language={store.getState().language}
-            setLang={this.setLang}
+            setLang={setLang}
             token={store.getState().token}
             admin={store.getState().admin}
           />
@@ -100,10 +95,10 @@ class App extends Component {
             <Route path='/quote/:id' component={ShowQuote} />
             <Route path='/login' component={Login} />
             <Route path='/profile' component={() => (
-              <Profile setUser={this.setUser} />
+              <Profile setUser={setUser} />
             )} />
             <Route path='/auth/:service/:token' render={props => (
-              <Auth {...props} setUser={this.setUser} />
+              <Auth {...props} setUser={setUser} />
             )} />
             <Route path='/author/:name' component={Author} />
             <Route path='/all-quotes' render={() => <AllQuotes/>} />
@@ -111,11 +106,7 @@ class App extends Component {
           </Switch>
         </section>
 
-        <Sidebar
-          authors={store.getState().allAuthors}
-          allImages={store.getState().allImages}
-          setPhrase={this.setPhrase}
-        />
+        <Sidebar />
       </div>
     )
   }

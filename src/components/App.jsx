@@ -1,5 +1,6 @@
 import React, {Component} from 'react'
 import { Switch, Route } from 'react-router-dom'
+
 import {store} from '../state/reducer'
 import {setQuotes, setAuthors, setImages, setPhase, setLanguage, setToken, setAdmin} from '../state/actions'
 import translate from '../shared/translate'
@@ -25,7 +26,7 @@ class App extends Component {
   constructor() {
     super()
     store.subscribe(() => console.log(store.getState()))
-    store.subscribe(this.render.bind(this))
+    store.subscribe(this.render)
   }
 
   componentDidMount() {
@@ -82,7 +83,7 @@ class App extends Component {
     translate.setLanguage(language)
   }
 
-  render() {
+  render = () => {
     return (
       <div className="App">
         <section className="right-section">
@@ -137,25 +138,8 @@ class App extends Component {
                 admin={store.getState().admin}
               />
             )} />
-            <Route path='/all-quotes' render={() => (
-              <AllQuotes
-                language={store.getState().language}
-                allQuotes={store.getState().allQuotes}
-                phrase={store.getState().phrase}
-                token={store.getState().token}
-                setPhrase={this.setPhrase}
-                admin={store.getState().admin}
-              />
-            )} />
-            <Route path='/' render={() => (
-              <RandomQuote
-                language={store.getState().language}
-                allQuotes={store.getState().allQuotes}
-                allImages={store.getState().allImages}
-                token={store.getState().token}
-                admin={store.getState().admin}
-              />
-            )} />
+            <Route path='/all-quotes' render={() => <AllQuotes/>} />
+            <Route path='/' component={RandomQuote} />
           </Switch>
         </section>
 

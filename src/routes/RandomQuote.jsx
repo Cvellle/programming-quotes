@@ -1,8 +1,10 @@
 import React, { Component } from 'react'
+import {connect} from 'react-redux'
+
 import ImageQuote from './../components/main/ImageQuote'
 import translate from './../shared/translate'
 
-export default class RandomQuote extends Component {
+class RandomQuote extends Component {
   constructor() {
     super()
     this.state = {
@@ -39,3 +41,15 @@ export default class RandomQuote extends Component {
     )
   }
 }
+
+const mapStateToProps = state => {
+  return {
+    language : state.language,
+    allQuotes : state.allQuotes,
+    allImages : state.allImages,
+    token : state.token,
+    admin : state.admin
+  }
+}
+
+export default connect(mapStateToProps)(RandomQuote)

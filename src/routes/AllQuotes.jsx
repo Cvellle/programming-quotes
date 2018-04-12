@@ -1,4 +1,6 @@
 import React from 'react'
+import {connect} from 'react-redux'
+
 import translate from '../shared/translate'
 import Quotes from '../components/main/Quotes'
 
@@ -15,4 +17,14 @@ const AllQuotes = ({ language, allQuotes, phrase, token, admin }) => {
   )
 }
 
-export default AllQuotes
+const mapStateToProps = state => {
+  return {
+    language : state.language,
+    allQuotes : state.allQuotes,
+    phrase : state.phrase,
+    token : state.token,
+    admin : state.admin
+  }
+}
+
+export default connect(mapStateToProps)(AllQuotes)

@@ -1,5 +1,4 @@
 import React, {Component} from 'react'
-import { Switch, Route } from 'react-router-dom'
 
 import {store} from '../state/reducer'
 import {setQuotes, setAuthors, setImages, setUser} from '../state/actions'
@@ -8,14 +7,7 @@ import {API, domain} from '../config/api'
 import {LS} from '../config/localstorage'
 import Navigation from './header/Navigation'
 import Sidebar from './sidebar/Sidebar'
-import AllQuotes from '../routes/AllQuotes'
-import Author from '../routes/Author'
-import EditQuote from '../routes/EditQuote'
-import ShowQuote from '../routes/ShowQuote'
-import RandomQuote from '../routes/RandomQuote'
-import Login from '../routes/Login'
-import Profile from '../routes/Profile'
-import Auth from '../routes/Auth'
+import Router from './Router'
 import cachedQuotes from '../data/quotes.json'
 import './App.css'
 
@@ -79,18 +71,7 @@ class App extends Component {
       <div className="App">
         <section className="right-section">
           <Navigation />
-          {/* TODO: odvojiti switch u zasebnu komponentu */}
-          <Switch>
-            <Route path='/add-quote' component={EditQuote} />
-            <Route path='/edit-quote/:id' component={EditQuote} />
-            <Route path='/quote/:id' component={ShowQuote} />
-            <Route path='/login' component={Login} />
-            <Route path='/profile' component={Profile} />
-            <Route path='/auth/:service/:token' render={Auth} />
-            <Route path='/author/:name' component={Author} />
-            <Route path='/all-quotes' render={() => <AllQuotes/>} />
-            <Route path='/' component={RandomQuote} />
-          </Switch>
+          <Router />
         </section>
         <Sidebar />
       </div>

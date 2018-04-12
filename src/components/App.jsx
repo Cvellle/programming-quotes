@@ -95,49 +95,17 @@ class App extends Component {
           />
 
           <Switch>
-            <Route path='/add-quote' component={props => (
-              <EditQuote
-                {...props}
-                token={store.getState().token}
-                admin={store.getState().admin}
-              />
-            )} />
-            <Route path='/edit-quote/:id' component={props => (
-              <EditQuote
-                {...props}
-                allQuotes={store.getState().allQuotes}
-                token={store.getState().token}
-                admin={store.getState().admin}
-              />
-            )} />
-            <Route path='/quote/:id' component={props => (
-              <ShowQuote {...props}
-                language={store.getState().language}
-                allQuotes={store.getState().allQuotes}
-                allImages={store.getState().allImages}
-                token={store.getState().token}
-                admin={store.getState().admin}
-              />
-            )} />
-            <Route path='/login' component={() => (
-              <Login/>
-            )} />
+            <Route path='/add-quote' component={EditQuote} />
+            <Route path='/edit-quote/:id' component={EditQuote} />
+            <Route path='/quote/:id' component={ShowQuote} />
+            <Route path='/login' component={Login} />
             <Route path='/profile' component={() => (
               <Profile setUser={this.setUser} />
             )} />
             <Route path='/auth/:service/:token' render={props => (
               <Auth {...props} setUser={this.setUser} />
             )} />
-            <Route path='/author/:name' render={props => (
-              <Author {...props}
-                language={store.getState().language}
-                allQuotes={store.getState().allQuotes}
-                allImages={store.getState().allImages}
-                token={store.getState().token}
-                phrase={store.getState().phrase}
-                admin={store.getState().admin}
-              />
-            )} />
+            <Route path='/author/:name' component={Author} />
             <Route path='/all-quotes' render={() => <AllQuotes/>} />
             <Route path='/' component={RandomQuote} />
           </Switch>

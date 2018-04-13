@@ -12,6 +12,7 @@ import cachedQuotes from '../data/quotes.json'
 import './App.css'
 
 // TODO: ukinuti bespotrebno prosledjivanje
+// proveriti store.subscribe(this.render)
 // BUG: profile logout ne re-renderuje
 
 const {dispatch} = store

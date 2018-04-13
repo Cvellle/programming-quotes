@@ -1,12 +1,14 @@
 import React, {Component} from 'react'
 import {Link} from 'react-router-dom'
+import {connect} from 'react-redux'
+
 import Stars from './Stars'
 import MessagePopup from './MessagePopup'
 import translate from '../../shared/translate'
 import {API} from '../../config/api'
 import './Quote.css'
 
-export default class Quote extends Component {
+class Quote extends Component {
   constructor() {
     super()
     this.state = {
@@ -62,3 +64,13 @@ export default class Quote extends Component {
     ) : translate('NO_TRANSLATION')
   }
 }
+
+const mapStateToProps = state => {
+  return {
+    language: state.language,
+    token : state.token,
+    admin : state.admin
+  }
+}
+
+export default connect(mapStateToProps)(Quote)

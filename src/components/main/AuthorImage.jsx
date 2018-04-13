@@ -1,4 +1,5 @@
 import React, {Component} from 'react'
+import {connect} from 'react-redux'
 import unknownImage from '../../assets/images/unknown.jpg'
 
 const responsiveBreakpoint = 800
@@ -43,4 +44,10 @@ class AuthorImage extends Component {
   }
 }
 
-export default AuthorImage
+const mapStateToProps = state => {
+  return {
+    allImages : state.allImages
+  }
+}
+
+export default connect(mapStateToProps)(AuthorImage)

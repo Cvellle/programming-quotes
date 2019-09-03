@@ -1,3 +1,5 @@
+//const url = "https://raw.githubusercontent.com/skolakoda/skolakoda.github.io/master/_data/quotes.json"
+
 import React, {Component} from 'react'
 import { Switch, Route } from 'react-router-dom'
 import translate from '../shared/translate'
@@ -19,7 +21,7 @@ import Auth from '../routes/Auth'
 import cachedQuotes from '../data/quotes.json'
 import './App.css'
 
-const url = "https://raw.githubusercontent.com/skolakoda/skolakoda.github.io/master/_data/quotes.json"
+const url = "https://www.json-generator.com/api/json/get/cfpYWdEFNK?indent=2";
 
 
 export default class App extends Component {
@@ -41,7 +43,7 @@ export default class App extends Component {
   
   componentDidMount() {
     this.initState(cachedQuotes)
-    this.loadQuotes(API.read)
+    this.loadQuotes(url)
     if (this.state.token) this.checkToken()
     
   }

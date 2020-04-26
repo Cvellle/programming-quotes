@@ -1,5 +1,5 @@
-import React from 'react'
-import './MessagePopup.css'
+import React from "react";
+import "./MessagePopup.css";
 
 export default ({ message, closePopup }) => {
   return (
@@ -8,7 +8,7 @@ export default ({ message, closePopup }) => {
         <h3>{message}</h3>
         <button onClick={closePopup}>Close</button>
       </div>
-      <div  className="black_overlay" onClick={closePopup} ></div>
+      <div className="black_overlay" onClick={closePopup}></div>
     </div>
-  )
-}
+  );
+};

@@ -1,4 +1,3 @@
-// 'http://localhost:5000'
 export const domain = 'https://baza-podataka.herokuapp.com'
 
 export const API = {

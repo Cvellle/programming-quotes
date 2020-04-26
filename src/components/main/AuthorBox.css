@@ -8,8 +8,11 @@
 
 @media (min-width: 800px) {
   .thumbnail {
-    float:left;
-    margin:0 15px;
-    width:350px;
+    float: left;
+    margin: 0 15px;
+    width: 350px;
+  }
+  .spec-author+ul {
+    display: none;
   }
 }

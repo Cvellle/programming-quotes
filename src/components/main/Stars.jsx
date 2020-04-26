@@ -1,49 +1,51 @@
-import React, {Component} from 'react'
-import ReactStars from 'react-stars'
-import {API} from '../../config/api'
-import {LS} from '../../config/localstorage'
-import translate from '../../shared/translate'
-import './Stars.css'
+import React, { Component } from "react";
+import ReactStars from "react-stars";
+import { API } from "../../config/api";
+import { LS } from "../../config/localstorage";
+import translate from "../../shared/translate";
+import "./Stars.css";
 
 export default class Stars extends Component {
   constructor(props) {
-    super()
+    super();
     this.state = {
       rating: Number(props.rating),
-      error: ''
-    }
+      error: "",
+    };
   }
 
   updateLocalVotes(votes) {
-    localStorage.setItem(LS.ratings, JSON.stringify(votes))
+    localStorage.setItem(LS.ratings, JSON.stringify(votes));
   }
 
   alreadyVoted(localVotes) {
-    return Array.isArray(localVotes) && localVotes.includes(this.props.id)
+    return Array.isArray(localVotes) && localVotes.includes(this.props.id);
   }
 
-  rate = newRating => {
-    const localVotes = JSON.parse(localStorage.getItem(LS.ratings))
+  rate = (newRating) => {
+    const localVotes = JSON.parse(localStorage.getItem(LS.ratings));
     if (this.alreadyVoted(localVotes))
-      return this.setState({ error: translate('CAN_VOTE_ONCE') })
-    const newStorage = localVotes ? [...localVotes, this.props.id] : [this.props.id]
+      return this.setState({ error: translate("CAN_VOTE_ONCE") });
+    const newStorage = localVotes
+      ? [...localVotes, this.props.id]
+      : [this.props.id];
     fetch(API.rate, {
-      method: 'POST',
+      method: "POST",
       body: JSON.stringify({
         _id: this.props.id,
         token: localStorage.getItem(LS.token),
-        newRating
+        newRating,
       }),
-      headers: {'content-type': 'application/json'}
+      headers: { "content-type": "application/json" },
     })
-      .then(response => response.json())
-      .then(response => this.setNewVote(newStorage, response))
-      .catch(e => this.setState({ error: translate('NETWORK_PROBLEM') }))
-  }
+      .then((response) => response.json())
+      .then((response) => this.setNewVote(newStorage, response))
+      .catch((e) => this.setState({ error: translate("NETWORK_PROBLEM") }));
+  };
 
   setNewVote(newStorage, newAverage) {
-    this.updateLocalVotes(newStorage)
-    this.setState({rating: newAverage})
+    this.updateLocalVotes(newStorage);
+    this.setState({ rating: newAverage });
   }
 
   render() {
@@ -52,6 +54,6 @@ export default class Stars extends Component {
         <ReactStars size={20} value={this.state.rating} onChange={this.rate} />
         {this.state.error && <p className="vote-error">{this.state.error}</p>}
       </div>
-    )
+    );
   }
 }

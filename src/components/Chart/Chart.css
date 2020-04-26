@@ -1,58 +1,103 @@
+.chartlist {
+  margin-top: 30vw;
+  width: 100%;
+  font-size: 5.5vw;
+}
+
 .chartdiv {
-  position:relative;
-  background:lightgray;
-  opacity:0.9;
-  left:78%;
-  top:0%;
-  width:20%;
-  height:1.5%;
-  display:-webkit-flex;
+  position: relative;
+  background: lightgray;
+  opacity: 0.9;
+  left: 0%;
+  top: 0%;
+  width: 100%;
+  height: 1.5%;
+  display: -webkit-flex;
   align-items: center;
-  padding-top:1rem;
-  /* border-top: 0.3rem solid lightgrey; */
-  /* border-bottom: 1rem solid grey; */
+  padding: 1rem;
+  margin-right: 0 !important;
+}
+
+.chartdiv .number {
+  width: 5vw;
+  margin-right: 0;
+  position: relative;
 }
 
 .chartdiv:nth-child(even) {
-  filter:brightness(1.1);
+  filter: brightness(1.1);
 }
 
-/* .chartdiv::after {
-  position:absolute;
-} */
-
-.chartlist {
-  position:relative;
-  left:-5%;
+ul {
+  position: relative;
+  left: 0%;
+  padding-inline-start: 0px;
 }
 
 .listpart {
-  position:relative;
-  /* height:0.5em; */
-  font-size:0.8em;
-  right:0%;
+  position: relative;
+  font-size: 0.8em;
+  right: 0%;
   list-style-type: none;
+  padding-left: 20px;
+  width: 95%;
 }
 
-/* .listpart:nth-child(even) {
-  background:grey;
-} */
+.listpart>* {
+  margin: 4vw 0;
+}
 
 .size {
-   background:darkblue;
+  background: darkblue;
   opacity: 0.8;
 }
 
 .number {
-  -webkit-transform:translateY(-80%) translatex(7rem);
+  -webkit-transform: translateY(-80%) translatex(7rem);
   font-size: 0.9em;
-  position:relative;
+  position: relative;
 }
 
-/* chart {
-  position: relative;
-  top:95%;
-  font-size:0.5em;
-  right:0%;
-  list-style-type: none;
-}  */
+.all-quotes+.chartlist {
+  display: none;
+}
+
+@media (min-width: 800px) {
+  .chartlist {
+    margin-top: 1.55rem;
+    font-size: 1.3rem;
+  }
+  .chartdiv {
+    position: relative;
+    background: lightgray;
+    opacity: 0.9;
+    left: 73.7%;
+    top: 0%;
+    width: 25%;
+    height: 1.5%;
+    display: -webkit-flex;
+    align-items: center;
+    padding-top: 1rem;
+  }
+  .chartdiv:nth-child(even) {
+    filter: brightness(1.1);
+  }
+  .listpart {
+    position: relative;
+    font-size: 0.8em;
+    right: 0%;
+    list-style-type: none;
+  }
+  .listpart>* {
+    margin: 0.3rem 0;
+  }
+  .size {
+    background: darkblue;
+    opacity: 0.8;
+  }
+  .number {
+    -webkit-transform: translateY(-80%) translatex(7rem);
+    font-size: 0.9em;
+    position: relative;
+  }
+}

@@ -5,5 +5,4 @@ export default function translate(key, lang) {
 }
 
 translate.currentLanguage = 'en'
-
 translate.setLanguage = lang => translate.currentLanguage = lang

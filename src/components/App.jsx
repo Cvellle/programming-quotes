@@ -1,115 +1,102 @@
-//const url = "https://raw.githubusercontent.com/skolakoda/skolakoda.github.io/master/_data/quotes.json"
-
-import React, {Component} from 'react'
-import { Switch, Route } from 'react-router-dom'
-import translate from '../shared/translate'
-import {getallImages, checkToken} from '../shared/helpers'
-import {API, domain} from '../config/api'
-import {LS} from '../config/localstorage'
-import Navigation from './header/Navigation'
-import Sidebar from './sidebar/Sidebar'
-import Chart from './Chart/Chart'
-
-import AllQuotes from '../routes/AllQuotes'
-import Author from '../routes/Author'
-import EditQuote from '../routes/EditQuote'
-import ShowQuote from '../routes/ShowQuote'
-import RandomQuote from '../routes/RandomQuote'
-import Login from '../routes/Login'
-import Profile from '../routes/Profile'
-import Auth from '../routes/Auth'
-import cachedQuotes from '../data/quotes.json'
-import './App.css'
+import React, { Component } from "react";
+import { Switch, Route } from "react-router-dom";
+import translate from "../shared/translate";
+import { getallImages, checkToken } from "../shared/helpers";
+import { API, domain } from "../config/api";
+import { LS } from "../config/localstorage";
+import Navigation from "./header/Navigation";
+import Sidebar from "./sidebar/Sidebar";
+import Chart from "./Chart/Chart";
+import AllQuotes from "../routes/AllQuotes";
+import Author from "../routes/Author";
+import EditQuote from "../routes/EditQuote";
+import ShowQuote from "../routes/ShowQuote";
+import RandomQuote from "../routes/RandomQuote";
+import Login from "../routes/Login";
+import Profile from "../routes/Profile";
+import Auth from "../routes/Auth";
+import cachedQuotes from "../data/quotes.json";
+import "./App.css";
+import "../components/Chart/Chart.css";
 
 const url = "https://www.json-generator.com/api/json/get/cfpYWdEFNK?indent=2";
 
-
 export default class App extends Component {
   constructor() {
-    super()
+    super();
     this.state = {
       allQuotes: [],
       allAuthors: new Set(),
-      recnikAutora:{},
+      recnikAutora: {},
       names: [],
       entr: [],
       allImages: new Map(),
-      phrase: '',
+      phrase: "",
       language: translate.currentLanguage,
       token: localStorage.getItem(LS.token),
-      admin: false
-    }
-  }
-  
-  componentDidMount() {
-    this.initState(cachedQuotes)
-    this.loadQuotes(url)
-    if (this.state.token) this.checkToken()
-    
+      admin: false,
+    };
   }
 
+  componentDidMount() {
+    this.initState(cachedQuotes);
+    this.loadQuotes(url);
+    if (this.state.token) this.checkToken();
+  }
 
   checkToken() {
-    const service = localStorage.getItem(LS.service)
-    const token = this.state.token
-    checkToken(`${domain}/auth/${service}/${token}`, token, this.setUser)
+    const service = localStorage.getItem(LS.service);
+    const token = this.state.token;
+    checkToken(`${domain}/auth/${service}/${token}`, token, this.setUser);
   }
 
   loadQuotes(url) {
-    const http = new XMLHttpRequest()
-    http.open('GET', url)
-    http.send()
+    const http = new XMLHttpRequest();
+    http.open("GET", url);
+    http.send();
     http.onload = () => {
-      const dbQuotes = JSON.parse(http.responseText)
-      this.initState(dbQuotes.length ? dbQuotes : cachedQuotes)
-    }
-    http.onerror = () => this.initState(cachedQuotes)
+      const dbQuotes = JSON.parse(http.responseText);
+      this.initState(dbQuotes.length ? dbQuotes : cachedQuotes);
+    };
+    http.onerror = () => this.initState(cachedQuotes);
   }
 
-  initState = allQuotes => {
-    const allAuthors = new Set(allQuotes.map(quote => quote.author).sort())
-    
-    this.getAuthorThumbs(allAuthors)
-    
+  initState = (allQuotes) => {
+    const allAuthors = new Set(allQuotes.map((quote) => quote.author).sort());
+    this.getAuthorThumbs(allAuthors);
     //Number of quotes per author - Object
-    const citati = allQuotes.map(quote => quote.author)
+    const citati = allQuotes.map((quote) => quote.author);
     const recnikAutora = {};
-    citati.forEach(function(i) { recnikAutora[i] = (recnikAutora[i]||0) + 1; });
-
+    citati.forEach(function (i) {
+      recnikAutora[i] = (recnikAutora[i] || 0) + 1;
+    });
     const entr = Object.entries(recnikAutora);
     const names = Object.keys(recnikAutora);
- 
-    this.setState(() => ({allQuotes, allAuthors, recnikAutora, names, entr}))
-
-    // console.log(entr)
-  }
+    this.setState(() => ({ allQuotes, allAuthors, recnikAutora, names, entr }));
+  };
 
   getAuthorThumbs(allAuthors) {
-    const wikiApiLimit = 50
-    const promises = []
+    const wikiApiLimit = 50;
+    const promises = [];
     for (let i = 0; i < [...allAuthors].length; i += wikiApiLimit)
-      promises.push(getallImages([...allAuthors].slice(i, i + wikiApiLimit)))
-    Promise.all(promises).then(data =>
+      promises.push(getallImages([...allAuthors].slice(i, i + wikiApiLimit)));
+    Promise.all(promises).then((data) =>
       this.setState({ allImages: data.reduce((a, b) => new Map([...a, ...b])) })
-    )
-
+    );
   }
 
-
-  setPhrase = phrase => {
-    this.setState({phrase})
-  }
+  setPhrase = (phrase) => {
+    this.setState({ phrase });
+  };
 
   setUser = (token, admin = false) => {
-    this.setState({token, admin})
-  }
+    this.setState({ token, admin });
+  };
 
-  setLang = language => {
-    this.setState({language})
-    translate.setLanguage(language)
-  }
-
-
+  setLang = (language) => {
+    this.setState({ language });
+    translate.setLanguage(language);
+  };
 
   render() {
     return (
@@ -121,82 +108,104 @@ export default class App extends Component {
             token={this.state.token}
             admin={this.state.admin}
           />
-
           <Switch>
-            <Route path='/add-quote' component={props => (
-              <EditQuote
-                {...props}
-                token={this.state.token}
-                admin={this.state.admin}
-              />
-            )} />
-            <Route path='/edit-quote/:id' component={props => (
-              <EditQuote
-                {...props}
-                allQuotes={this.state.allQuotes}
-                token={this.state.token}
-                admin={this.state.admin}
-              />
-            )} />
-            <Route path='/quote/:id' component={props => (
-              <ShowQuote {...props}
-                language={this.state.language}
-                allQuotes={this.state.allQuotes}
-                allImages={this.state.allImages}
-                token={this.state.token}
-                admin={this.state.admin}
-              />
-            )} />
-            <Route path='/login' component={() => (
-              <Login/>
-            )} />
-            <Route path='/profile' component={() => (
-              <Profile setUser={this.setUser} />
-            )} />
-            <Route path='/auth/:service/:token' render={props => (
-              <Auth {...props} setUser={this.setUser} />
-            )} />
-            <Route path='/author/:name' render={props => (
-              <Author {...props}
-                language={this.state.language}
-                allQuotes={this.state.allQuotes}
-                allImages={this.state.allImages}
-                token={this.state.token}
-                phrase={this.state.phrase}
-                admin={this.state.admin}
-              />
-            )} />
-            <Route path='/all-quotes' render={() => (
-              <AllQuotes
-                language={this.state.language}
-                allQuotes={this.state.allQuotes}
-                phrase={this.state.phrase}
-                token={this.state.token}
-                setPhrase={this.setPhrase}
-                admin={this.state.admin}
-              />
-            )} />
-            <Route path='/' render={() => (
-              <RandomQuote
-                language={this.state.language}
-                allQuotes={this.state.allQuotes}
-                allImages={this.state.allImages}
-                token={this.state.token}
-                admin={this.state.admin}
-              />
-            )} />
+            <Route
+              path="/add-quote"
+              component={(props) => (
+                <EditQuote
+                  {...props}
+                  token={this.state.token}
+                  admin={this.state.admin}
+                />
+              )}
+            />
+            <Route
+              path="/edit-quote/:id"
+              component={(props) => (
+                <EditQuote
+                  {...props}
+                  allQuotes={this.state.allQuotes}
+                  token={this.state.token}
+                  admin={this.state.admin}
+                />
+              )}
+            />
+            <Route
+              path="/quote/:id"
+              component={(props) => (
+                <ShowQuote
+                  {...props}
+                  language={this.state.language}
+                  allQuotes={this.state.allQuotes}
+                  allImages={this.state.allImages}
+                  token={this.state.token}
+                  admin={this.state.admin}
+                />
+              )}
+            />
+            <Route path="/login" component={() => <Login />} />
+            <Route
+              path="/profile"
+              component={() => <Profile setUser={this.setUser} />}
+            />
+            <Route
+              path="/auth/:service/:token"
+              render={(props) => <Auth {...props} setUser={this.setUser} />}
+            />
+            <Route
+              path="/author/:name"
+              render={(props) => (
+                <Author
+                  {...props}
+                  language={this.state.language}
+                  allQuotes={this.state.allQuotes}
+                  allImages={this.state.allImages}
+                  token={this.state.token}
+                  phrase={this.state.phrase}
+                  admin={this.state.admin}
+                />
+              )}
+            />
+            <Route
+              path="/all-quotes"
+              render={() => (
+                <AllQuotes
+                  language={this.state.language}
+                  allQuotes={this.state.allQuotes}
+                  phrase={this.state.phrase}
+                  token={this.state.token}
+                  setPhrase={this.setPhrase}
+                  admin={this.state.admin}
+                />
+              )}
+            />
+            <Route
+              path="/"
+              render={() => (
+                <RandomQuote
+                  language={this.state.language}
+                  allQuotes={this.state.allQuotes}
+                  allImages={this.state.allImages}
+                  token={this.state.token}
+                  admin={this.state.admin}
+                />
+              )}
+            />
           </Switch>
-          <Chart className="chart" recnikAutora={this.state.recnikAutora} names={this.state.names} entr={this.state.entr} allQuotes={this.state.allQuotes}/>
+          <Chart
+            className="chart"
+            recnikAutora={this.state.recnikAutora}
+            names={this.state.names}
+            entr={this.state.entr}
+            allQuotes={this.state.allQuotes}
+          />
         </section>
-
         <Sidebar
           authors={this.state.allAuthors}
           allImages={this.state.allImages}
           setPhrase={this.setPhrase}
         />
-
-
       </div>
-    )
+    );
   }
 }

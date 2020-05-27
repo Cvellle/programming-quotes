@@ -1,6 +1,8 @@
 .chartlist {
   margin-top: 30vw;
   width: 100%;
+  height: 60vh;
+  overflow-y: scroll;
   font-size: 5.5vw;
 }
 
@@ -11,7 +13,7 @@
   left: 0%;
   top: 0%;
   width: 100%;
-  height: 1.5%;
+  height: 20vw;
   display: -webkit-flex;
   align-items: center;
   padding: 1rem;
@@ -36,7 +38,7 @@ ul {
 
 .listpart {
   position: relative;
-  font-size: 0.8em;
+  font-size: 0.7em;
   right: 0%;
   list-style-type: none;
   padding-left: 20px;
@@ -44,7 +46,7 @@ ul {
 }
 
 .listpart>* {
-  margin: 4vw 0;
+  margin: 2vw 0;
 }
 
 .size {
@@ -66,6 +68,8 @@ ul {
   .chartlist {
     margin-top: 1.55rem;
     font-size: 1.3rem;
+    overflow-y: visible;
+    height: unset;
   }
   .chartdiv {
     position: relative;
@@ -87,6 +91,7 @@ ul {
     font-size: 0.8em;
     right: 0%;
     list-style-type: none;
+    height: 1.5%;
   }
   .listpart>* {
     margin: 0.3rem 0;
